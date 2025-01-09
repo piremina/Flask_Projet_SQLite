@@ -67,29 +67,28 @@ def enregistrer_client():
     nom = request.form['nom']
     prenom = request.form['prenom']
 
-@app.route('/fiche_nom/', methods=['GET', 'POST'])
-def fiche_nom():
+
+
+@app.route('/fiche_nom/<int:post_id>')
+def formulaire_fiche_nom(post_id):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM clients;')
+    cursor.execute('SELECT * FROM clients WHERE id = ?', (post_id,))
     data = cursor.fetchall()
     conn.close()
-    if request.method == 'POST':
-        # Récupérer le nom recherché depuis le formulaire
-        nom_recherche = request.form['nom'].strip().lower()
-        
-        # Effectuer la recherche dans une liste fictive (ou une base de données)
-        #client = next((c for c in clients if c['nom'].lower() == nom_recherche), None)
-        
-        if client:
-            # Afficher les résultats si le client est trouvé
-            return render_template('fiche_nom.html', client=client, error=False)
-        else:
-            # Afficher un message d'erreur si le client n'est pas trouvé
-            return render_template('fiche_nom.html', client=None, error=True)
-    
-    # Affichage initial de la page avec le formulaire
-    return render_template('fiche_nom.html', client=None, error=False)
+    # Rendre le template HTML et transmettre les données
+    return render_template('fiche_nom.html', data=data)
+
+
+ @app.route('/fiche_nom/', methods=['POST'])   
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients WHERE nom = ? AND prenom = ?, (post_nom,))
+    data = cursor.fetchall()
+    conn.close()
+    # Rendre le template HTML et transmettre les données
+    return render_template('resultat_nom.html', data=data)
+
 
 
 
